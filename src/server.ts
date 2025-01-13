@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 7000;
 // CORS Configuration
 app.use(
   cors({
-    origin: "*", 
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -29,7 +29,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `http://localhost:${PORT}`,
+        url: `https://job-board-backend-g3c5.onrender.com`,
         description: "Development server",
       },
     ],
