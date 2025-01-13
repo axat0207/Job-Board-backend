@@ -1,11 +1,22 @@
+// server.ts
 import express from "express";
+import cors from "cors";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-import cors from "cors"; // Ensure this import is present
 import jobRoutes from "./routes/jobRoutes";
+
 const app = express();
+
+// CORS Configuration
+app.use(
+  cors({
+    origin: "*", // In production, replace with your frontend domain
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.use(express.json());
-app.use(cors());
 
 const swaggerOptions = {
   definition: {
@@ -22,7 +33,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["./src/controllers/*.ts"], // files containing annotations as above
+  apis: ["./src/controllers/*.ts"],
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
