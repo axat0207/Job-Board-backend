@@ -1,4 +1,3 @@
-// server.ts
 import express from "express";
 import cors from "cors";
 import swaggerJsdoc from "swagger-jsdoc";
@@ -6,11 +5,12 @@ import swaggerUi from "swagger-ui-express";
 import jobRoutes from "./routes/jobRoutes";
 
 const app = express();
+const PORT = process.env.PORT || 7000;
 
 // CORS Configuration
 app.use(
   cors({
-    origin: "*", // In production, replace with your frontend domain
+    origin: "*", 
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -18,6 +18,7 @@ app.use(
 
 app.use(express.json());
 
+// Swagger Options
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
@@ -28,7 +29,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:7000",
+        url: `http://localhost:${PORT}`,
         description: "Development server",
       },
     ],
@@ -36,13 +37,19 @@ const swaggerOptions = {
   apis: ["./src/controllers/*.ts"],
 };
 
+// Swagger Docs
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// Root Route to Redirect to Swagger Docs
+app.get("/", (req, res) => {
+  res.redirect("/api-docs");
+});
 
 // Routes
 app.use("/jobs", jobRoutes);
 
-const PORT = process.env.PORT || 7000;
+// Start the Server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(
